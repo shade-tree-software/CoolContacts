@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {
+            border: 1px solid black;
+        }
+
+        th {
+            background-color: lightgrey;
+            padding: 0 5px;
+        }
+
+        input {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Contacts</h1>
+<form action="person/new" method="post">
+    <input name="name" placeholder="Name"/><br/>
+    <input name="number" placeholder="Phone Number"/><br/>
+    <button type="submit">Submit</button>
+</form>
+<br/>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Phone Number</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <% people.rows.forEach(function(person){ %>
+    <tr>
+        <td><%= person.name %></td>
+        <td><%= person.number %></td>
+        <td>
+            <form action="person/delete" method="post">
+                <input hidden name="id" type="number" value="<%=person.id%>"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    <% }) %>
+
+    </tbody>
+</table>
+</body>
+</html>
