@@ -6,25 +6,26 @@ const app = express()
 const fs = require('fs');
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
+const co = require('co')
 const assert = require('assert')
 
 const mongodbUrl = fs.readFileSync('.mongodb_url', 'utf8')
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
-console.log(mongodbUrl);
-MongoClient.connect(mongodbUrl, function (err, db) {
-  if (err) throw err;
+MongoClient.connect(mongodbUrl).then(function (db) {
   console.log("Database loaded");
   runApp(db)
-});
+}).catch(function (err) {
+  console.log(err.stack)
+})
 
 let runApp = function (db) {
-  app.use(bodyParser.urlencoded());
+  app.use(bodyParser.urlencoded({extended: true}));
 
   app.get('/', function (req, res) {
-    db.collection('people').find().toArray().then(function (people) {
+    co(function* () {
+      let people = yield db.collection('people').find().toArray()
       ejs.renderFile('people.ejs', {people: people}, {}, function (err, htmlString) {
-        assert.equal(null, err)
         res.send(htmlString)
       })
     }).catch(function (err) {
@@ -47,12 +48,12 @@ let runApp = function (db) {
     db.collection('people').deleteOne(query).then(function (r) {
       assert.equal(1, r.deletedCount)
       res.redirect('/')
-    }).catch(function(err){
+    }).catch(function (err) {
       console.log(err.stack)
     })
   })
 
   app.listen(4000, function () {
-    console.log('Example app listening on port 4000!')
+    console.log('Listening on port 4000')
   })
 }

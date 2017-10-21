@@ -1,53 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        table {
-            border: 1px solid black;
-        }
-
-        th {
-            background-color: lightgrey;
-            padding: 0 5px;
-        }
-
-        input {
-            margin-bottom: 5px;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 </head>
 <body>
-<h1>Contacts</h1>
-<form action="person/new" method="post">
-    <input name="name" placeholder="Name"/><br/>
-    <input name="number" placeholder="Phone Number"/><br/>
-    <button type="submit">Submit</button>
-</form>
-<br/>
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Phone Number</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
+<div class="container">
+    <h1>Contacts</h1>
+    <form action="person/new" method="post">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <input name="name" class="form-control" placeholder="Name"/><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <input name="number" class="form-control" placeholder="Phone Number"/><br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <button type="submit" class="btn btn-primary float-right">Submit</button>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <br/>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
 
-    <% people.forEach(function(person){ %>
-    <tr>
-        <td><%= person.name %></td>
-        <td><%= person.number %></td>
-        <td>
-            <form action="person/delete" method="post">
-                <input hidden name="id" value="<%=person._id%>"/>
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-    <% }) %>
+        <% people.forEach(function(person){ %>
+        <tr>
+            <td><%= person.name %></td>
+            <td><%= person.number %></td>
+            <td>
+                <form action="person/delete" method="post">
+                    <input hidden name="id" value="<%= person._id %>"/>
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }) %>
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+            integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+            integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+            crossorigin="anonymous"></script>
+</div>
 </body>
 </html>
