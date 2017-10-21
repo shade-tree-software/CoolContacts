@@ -9,6 +9,11 @@ const ejs = require('ejs')
 const co = require('co')
 const assert = require('assert')
 
+//const babel = require("babel-core");
+
+//const browserify = require("browserify");
+//const babelify = require("babelify");
+
 const mongodbUrl = fs.readFileSync('.mongodb_url', 'utf8')
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
@@ -31,6 +36,16 @@ let runApp = function (db) {
     }).catch(function (err) {
       console.log(err.stack)
     })
+  })
+
+  app.get('/react_stuff.js', function(req, res){
+    res.send(fs.readFileSync('bundle.js', 'utf8'))
+    //
+    //res.send(babel.transformFileSync("react_stuff.jsx").code)
+    //
+    //browserify('react_stuff.jsx').transform(babelify).bundle(function(err, buf){
+    //  res.send(buf)
+    //})
   })
 
   app.post('/person/new', function (req, res) {
