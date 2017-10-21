@@ -34,13 +34,13 @@
     </thead>
     <tbody>
 
-    <% people.rows.forEach(function(person){ %>
+    <% people.forEach(function(person){ %>
     <tr>
         <td><%= person.name %></td>
         <td><%= person.number %></td>
         <td>
             <form action="person/delete" method="post">
-                <input hidden name="id" type="number" value="<%=person.id%>"/>
+                <input hidden name="id" value="<%=person._id%>"/>
                 <button type="submit">Delete</button>
             </form>
         </td>

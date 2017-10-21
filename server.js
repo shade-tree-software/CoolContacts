@@ -1,52 +1,58 @@
 /**
  * Created by ahamilton on 10/19/17.
  */
-
 const express = require('express')
 const app = express()
 const fs = require('fs');
 const bodyParser = require('body-parser')
 const ejs = require('ejs')
+const assert = require('assert')
 
-app.use(bodyParser.urlencoded());
+const mongodbUrl = fs.readFileSync('.mongodb_url', 'utf8')
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
+console.log(mongodbUrl);
+MongoClient.connect(mongodbUrl, function (err, db) {
+  if (err) throw err;
+  console.log("Database loaded");
+  runApp(db)
+});
 
-app.get('/', function (req, res) {
-  fs.readFile('db.json', 'utf8', function(err, contents){
-    let data = JSON.parse(contents)
-    ejs.renderFile('people.ejs', data, {}, function(err, htmlString){
-      res.send(htmlString)
+let runApp = function (db) {
+  app.use(bodyParser.urlencoded());
+
+  app.get('/', function (req, res) {
+    db.collection('people').find().toArray().then(function (people) {
+      ejs.renderFile('people.ejs', {people: people}, {}, function (err, htmlString) {
+        assert.equal(null, err)
+        res.send(htmlString)
+      })
+    }).catch(function (err) {
+      console.log(err.stack)
     })
   })
-})
 
-app.post('/person/new', function(req, res){
-  fs.readFile('db.json', 'utf8', function(err, contents) {
-    let data = JSON.parse(contents)
-    data.people.rows.push({id: data.people.next_id++, name: req.body.name, number: req.body.number})
-    fs.writeFile('db.json', JSON.stringify(data), function(){
+  app.post('/person/new', function (req, res) {
+    let person = {name: req.body.name, number: req.body.number}
+    db.collection('people').insertOne(person).then(function (r) {
+      assert.equal(1, r.insertedCount)
       res.redirect('/')
+    }).catch(function (err) {
+      console.log(err.stack)
     })
   })
-})
 
-app.post('/person/delete', function(req, res){
-  fs.readFile('db.json', 'utf8', function(err, contents) {
-    let data = JSON.parse(contents)
-    for (let index=0; index < data.people.rows.length; index++){
-      if (data.people.rows[index].id == req.body.id){
-        delete data.people.rows[index];
-        break
-      }
-    }
-    data.people.rows = data.people.rows.filter(function(x){
-      return (x != undefined)
-    })
-    fs.writeFile('db.json', JSON.stringify(data), function(){
+  app.post('/person/delete', function (req, res) {
+    let query = {_id: new mongodb.ObjectID(req.body.id)}
+    db.collection('people').deleteOne(query).then(function (r) {
+      assert.equal(1, r.deletedCount)
       res.redirect('/')
+    }).catch(function(err){
+      console.log(err.stack)
     })
   })
-})
 
-app.listen(4000, function () {
-  console.log('Example app listening on port 4000!')
-})
+  app.listen(4000, function () {
+    console.log('Example app listening on port 4000!')
+  })
+}
