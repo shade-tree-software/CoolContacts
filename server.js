@@ -9,10 +9,10 @@ const ejs = require('ejs')
 const co = require('co')
 const assert = require('assert')
 
-const babel = require("babel-core");
+//const babel = require("babel-core");
 
-//const browserify = require("browserify");
-//const babelify = require("babelify");
+const browserify = require("browserify");
+const babelify = require("babelify");
 
 const mongodbUrl = fs.readFileSync('.mongodb_url', 'utf8')
 const mongodb = require('mongodb');
@@ -28,24 +28,13 @@ let runApp = function (db) {
   app.use(bodyParser.urlencoded({extended: true}));
 
   app.get('/', function (req, res) {
-    co(function* () {
-      let people = yield db.collection('people').find().toArray()
-      ejs.renderFile('people.ejs', {people: people}, {}, function (err, htmlString) {
-        res.send(htmlString)
-      })
-    }).catch(function (err) {
-      console.log(err.stack)
-    })
+    res.send(fs.readFileSync('index.html', 'utf8'))
   })
 
-  app.get('/react_stuff.js', function(req, res){
-    //res.send(fs.readFileSync('bundle.js', 'utf8'))
-    //
-    res.send(babel.transformFileSync("react_stuff.jsx").code)
-    //
-    //browserify('react_stuff.jsx').transform(babelify).bundle(function(err, buf){
-    //  res.send(buf)
-    //})
+  app.get('/react_stuff.js', function (req, res) {
+    browserify('react_stuff.jsx').transform(babelify).bundle(function (err, buf) {
+      res.send(buf)
+    })
   })
 
   app.post('/person/new', function (req, res) {
