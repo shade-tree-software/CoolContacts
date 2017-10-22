@@ -2,28 +2,44 @@
 //import ReactDOM from 'react-dom';
 
 class NewPerson extends React.Component {
-  clickHandler = (e) => {
+  constructor(){
+    super()
+    this.state={name:'',number:''}
+  }
+
+  submitHandler = (e) => {
     e.preventDefault();
-    console.log('new person');
+    console.log('name: ' + this.state.name + ', number: ' + this.state.number);
+  }
+
+  changeHandler = (e) => {
+      this.setState({[e.target.name]: e.target.value})
   }
 
   render() {
     return (
-      <form action="person/new" method="post">
+      <form onSubmit={this.submitHandler} action="person/new" method="post">
         <div className="row">
           <div className="col-lg-6 col-md-8 col-sm-10">
-            <input name="name" className="form-control" placeholder="Name"/><br/>
+            <input name="name"
+                   className="form-control"
+                   placeholder="Name"
+                   value={this.state.name}
+                   onChange={this.changeHandler}/><br/>
           </div>
         </div>
         <div className="row">
           <div className="col-lg-6 col-md-8 col-sm-10">
-            <input name="number" className="form-control" placeholder="Phone Number"/><br/>
+            <input name="number"
+                   className="form-control"
+                   placeholder="Phone Number"
+                   value={this.state.number}
+                   onChange={this.changeHandler}/><br/>
           </div>
         </div>
         <div className="row">
           <div className="col-lg-6 col-md-8 col-sm-10">
-            <button onClick={this.clickHandler}
-                    type="submit"
+            <button type="submit"
                     className="btn btn-primary float-right">Submit
             </button>
           </div>
