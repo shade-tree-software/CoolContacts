@@ -9,31 +9,6 @@
 <body>
 <div class="container">
     <div id="root"></div>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-
-        <% people.forEach(function(person){ %>
-        <tr>
-            <td><%= person.name %></td>
-            <td><%= person.number %></td>
-            <td>
-                <form action="person/delete" method="post">
-                    <input hidden name="id" value="<%= person._id %>"/>
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                </form>
-            </td>
-        </tr>
-        <% }) %>
-
-        </tbody>
-    </table>
     <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="/react_stuff.js"></script>
