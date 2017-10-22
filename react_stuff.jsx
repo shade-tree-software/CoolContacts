@@ -2,6 +2,11 @@
 //import ReactDOM from 'react-dom';
 
 class NewPerson extends React.Component {
+  clickHandler = (e) => {
+    e.preventDefault();
+    console.log('new person');
+  }
+
   render() {
     return (
       <form action="person/new" method="post">
@@ -17,7 +22,10 @@ class NewPerson extends React.Component {
         </div>
         <div className="row">
           <div className="col-lg-6 col-md-8 col-sm-10">
-            <button type="submit" className="btn btn-primary float-right">Submit</button>
+            <button onClick={this.clickHandler}
+                    type="submit"
+                    className="btn btn-primary float-right">Submit
+            </button>
           </div>
         </div>
       </form>
@@ -26,6 +34,11 @@ class NewPerson extends React.Component {
 }
 
 class Person extends React.Component {
+  clickHandler = (e) => {
+    e.preventDefault();
+    console.log('delete person');
+  }
+
   render() {
     return (
       <tr>
@@ -33,8 +46,11 @@ class Person extends React.Component {
         <td>{this.props.number}</td>
         <td>
           <form action="person/delete" method="post">
-            <input hidden readOnly name="id" value="<%= person._id %>"/>
-            <button type="submit" className="btn btn-sm btn-danger">Delete</button>
+            <input hidden readOnly name="id" value={this.props.id}/>
+            <button onClick={this.clickHandler}
+                    type="submit"
+                    className="btn btn-sm btn-danger">Delete
+            </button>
           </form>
         </td>
       </tr>
@@ -43,6 +59,41 @@ class Person extends React.Component {
 }
 
 class People extends React.Component {
+  constructor() {
+    super()
+    this.state = {people: []}
+  }
+
+  tick = () => {
+    this.setState({
+      people: [
+        {id: 1, name: 'Andrew', number: '703-801-5116'},
+        {id: 2, name: 'Donna', number: '703-927-4117'}
+      ]
+    })
+  }
+
+  componentDidMount() {
+    this.timerId = setInterval(this.tick, 10000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerId);
+  }
+
+  render() {
+    return (
+      this.state.people.map((person) =>
+        <Person key={person.id}
+                id={person.id}
+                name={person.name}
+                number={person.number}/>
+      )
+    )
+  }
+}
+
+class PeopleTable extends React.Component {
   render() {
     return (
       <table className="table">
@@ -54,7 +105,7 @@ class People extends React.Component {
         </tr>
         </thead>
         <tbody>
-        <Person name="Andrew" number="703-801-5116"/>
+        <People/>
         </tbody>
       </table>
     )
@@ -68,24 +119,21 @@ class Clock extends React.Component {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
+    this.timerID = setInterval(this.tick, 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
-  tick(){
+  tick = () => {
     this.setState({
       date: new Date()
     });
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
     )
   }
@@ -100,7 +148,7 @@ class App extends React.Component {
         <NewPerson/>
         <br/>
         <br/>
-        <People/>
+        <PeopleTable/>
       </div>
     )
   }
