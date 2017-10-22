@@ -9,7 +9,8 @@ class NewPerson extends React.Component {
 
   submitHandler = (e) => {
     e.preventDefault();
-    console.log('name: ' + this.state.name + ', number: ' + this.state.number);
+    this.props.addNewPerson(this.state.name, this.state.number)
+    this.setState({name:'', number:''})
   }
 
   changeHandler = (e) => {
@@ -75,31 +76,9 @@ class Person extends React.Component {
 }
 
 class People extends React.Component {
-  constructor() {
-    super()
-    this.state = {people: []}
-  }
-
-  tick = () => {
-    this.setState({
-      people: [
-        {id: 1, name: 'Andrew', number: '703-801-5116'},
-        {id: 2, name: 'Donna', number: '703-927-4117'}
-      ]
-    })
-  }
-
-  componentDidMount() {
-    this.timerId = setInterval(this.tick, 10000)
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerId);
-  }
-
   render() {
     return (
-      this.state.people.map((person) =>
+      this.props.people.map((person) =>
         <Person key={person.id}
                 id={person.id}
                 name={person.name}
@@ -121,7 +100,7 @@ class PeopleTable extends React.Component {
         </tr>
         </thead>
         <tbody>
-        <People/>
+        <People people={this.props.people}/>
         </tbody>
       </table>
     )
@@ -156,15 +135,43 @@ class Clock extends React.Component {
 }
 
 class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {people: [
+      {id: 1, name: 'Andrew', number: '703-801-5116'},
+      {id: 2, name: 'Donna', number: '703-927-4117'}
+    ]}
+  }
+
+  getLatestPeople = () => {
+    //TODO: get latest people from server
+  }
+
+  componentDidMount() {
+    this.timerId = setInterval(this.getLatestPeople, 10000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerId);
+  }
+
+  addNewPerson = (name, number) => {
+    // Add a temporary instance of this person.  This will be wiped when we get the real results from the server
+    this.setState(prevState => ({
+      people: [...prevState.people, {id: Date.now(), name: name, number: number}]
+    }))
+    //TODO: send new person to server
+  }
+
   render() {
     return (
       <div>
         <h1>Contacts</h1>
         <Clock/>
-        <NewPerson/>
+        <NewPerson addNewPerson={this.addNewPerson}/>
         <br/>
         <br/>
-        <PeopleTable/>
+        <PeopleTable people={this.state.people}/>
       </div>
     )
   }
