@@ -1,4 +1,4 @@
-# basic_web
+# CoolWeb
 A simple contacts app implemented with some cool new web technologies
 
 This started out as an old-school web app using traditional form submits and
