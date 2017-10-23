@@ -4,13 +4,13 @@ import ReactDOM from 'react-dom';
 class NewPerson extends React.Component {
   constructor() {
     super()
-    this.state = {name: '', number: ''}
+    this.state = {firstName: '', lastName: '', number: ''}
   }
 
   submitHandler = (e) => {
     e.preventDefault();
-    this.props.addNewPerson(this.state.name, this.state.number)
-    this.setState({name: '', number: ''})
+    this.props.addNewPerson(this.state)
+    this.setState({firstName: '', lastName: '', number: ''})
   }
 
   changeHandler = (e) => {
@@ -21,11 +21,18 @@ class NewPerson extends React.Component {
     return (
       <form onSubmit={this.submitHandler} action="person/new" method="post">
         <div className="row">
-          <div className="col-lg-6 col-md-8 col-sm-10">
-            <input name="name"
+          <div className="col-lg-3 col-md-4 col-sm-5">
+            <input name="firstName"
                    className="form-control"
-                   placeholder="Name"
-                   value={this.state.name}
+                   placeholder="First Name"
+                   value={this.state.firstName}
+                   onChange={this.changeHandler}/><br/>
+          </div>
+          <div className="col-lg-3 col-md-4 col-sm-5">
+            <input name="lastName"
+                   className="form-control"
+                   placeholder="Last Name"
+                   value={this.state.lastName}
                    onChange={this.changeHandler}/><br/>
           </div>
         </div>
@@ -53,17 +60,18 @@ class NewPerson extends React.Component {
 class Person extends React.Component {
   clickHandler = (e) => {
     e.preventDefault();
-    this.props.deletePerson(this.props._id)
+    this.props.deletePerson(this.props.person._id)
   }
 
   render() {
     return (
       <tr>
-        <td>{this.props.name}</td>
-        <td>{this.props.number}</td>
+        <td>{this.props.person.firstName}</td>
+        <td>{this.props.person.lastName}</td>
+        <td>{this.props.person.number}</td>
         <td>
           <form action="person/delete" method="post">
-            <input hidden readOnly name="_id" value={this.props._id}/>
+            <input hidden readOnly name="_id" value={this.props.person._id}/>
             <button onClick={this.clickHandler}
                     type="submit"
                     className="btn btn-sm btn-danger">Delete
@@ -80,9 +88,7 @@ class People extends React.Component {
     return (
       this.props.people.map((person) =>
         <Person key={person._id}
-                _id={person._id}
-                name={person.name}
-                number={person.number}
+                person={person}
                 deletePerson={this.props.deletePerson}/>
       )
     )
@@ -95,7 +101,8 @@ class PeopleTable extends React.Component {
       <table className="table">
         <thead>
         <tr>
-          <th>Name</th>
+          <th>First Name</th>
+          <th>Last Name</th>
           <th>Phone Number</th>
           <th></th>
         </tr>
@@ -158,13 +165,13 @@ class App extends React.Component {
     clearInterval(this.timerId);
   }
 
-  addNewPerson = (name, number) => {
+  addNewPerson = (person) => {
     fetch('people/new', {
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'post',
-      body: JSON.stringify({name, number})
+      body: JSON.stringify({person})
     }).then(this.getLatestPeople)
   }
 
@@ -180,7 +187,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>My Contacts</h1>
+        <h1>Contacts</h1>
         <Clock/>
         <NewPerson addNewPerson={this.addNewPerson}/>
         <br/>

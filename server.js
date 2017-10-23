@@ -38,7 +38,7 @@ let runApp = function (db) {
   })
 
   app.post('/people/new', function (req, res) {
-    let person = {name: req.body.name, number: req.body.number}
+    let person = req.body.person
     db.collection('people').insertOne(person).then(function (r) {
       assert.equal(1, r.insertedCount)
       res.sendStatus(200)
