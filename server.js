@@ -40,7 +40,6 @@ let runApp = function (db) {
   })
 
   app.post('/people/new', function (req, res) {
-    console.log(req.body)
     let person = {name: req.body.name, number: req.body.number}
     db.collection('people').insertOne(person).then(function (r) {
       assert.equal(1, r.insertedCount)

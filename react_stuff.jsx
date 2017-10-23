@@ -138,9 +138,7 @@ class Clock extends React.Component {
 class App extends React.Component {
   constructor() {
     super()
-    this.state = {
-      people: []
-    }
+    this.state = {people: []}
   }
 
   getLatestPeople = () => {
@@ -167,12 +165,7 @@ class App extends React.Component {
       },
       method: 'post',
       body: JSON.stringify({name, number})
-    }).then(() => {
-      // Add a temporary instance of this person.  This will be wiped when we get the real results from the server
-      this.setState(prevState => ({
-        people: [...prevState.people, {_id: Date.now(), name: name, number: number}]
-      }))
-    })
+    }).then(this.getLatestPeople)
   }
 
   deletePerson = (_id) => {
@@ -181,7 +174,7 @@ class App extends React.Component {
         'Content-Type': 'application/json'
       },
       method: 'delete'
-    })
+    }).then(this.getLatestPeople)
   }
 
   render() {
