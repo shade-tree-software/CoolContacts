@@ -180,7 +180,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Contacts</h1>
+        <h1>My Contacts</h1>
         <Clock/>
         <NewPerson addNewPerson={this.addNewPerson}/>
         <br/>

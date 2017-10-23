@@ -20,21 +20,19 @@ MongoClient.connect(mongodbUrl).then(function (db) {
 })
 
 let runApp = function (db) {
-  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.urlencoded({extended: false}))
   app.use(bodyParser.json())
 
   app.get('/', function (req, res) {
     res.send(fs.readFileSync('index.html', 'utf8'))
   })
 
-  app.get('/react_stuff.js', function (req, res) {
-    browserify('react_stuff.jsx').transform(babelify).bundle(function (err, buf) {
-      res.send(buf)
-    })
+  app.get('/client.js', function (req, res) {
+    res.send(fs.readFileSync('dist/client.js', 'utf8'))
   })
 
-  app.get('/people', function(req, res){
-    db.collection('people').find().toArray(function(err, result) {
+  app.get('/people', function (req, res) {
+    db.collection('people').find().toArray(function (err, result) {
       res.send(result)
     })
   })
