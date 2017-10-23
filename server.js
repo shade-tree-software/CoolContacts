@@ -25,7 +25,8 @@ MongoClient.connect(mongodbUrl).then(function (db) {
 })
 
 let runApp = function (db) {
-  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
 
   app.get('/', function (req, res) {
     res.send(fs.readFileSync('index.html', 'utf8'))
@@ -37,21 +38,28 @@ let runApp = function (db) {
     })
   })
 
-  app.post('/person/new', function (req, res) {
+  app.get('/people', function(req, res){
+    db.collection('people').find().toArray(function(err, result) {
+      res.send(result)
+    })
+  })
+
+  app.post('/people/new', function (req, res) {
+    console.log(req.body)
     let person = {name: req.body.name, number: req.body.number}
     db.collection('people').insertOne(person).then(function (r) {
       assert.equal(1, r.insertedCount)
-      res.redirect('/')
+      res.sendStatus(200)
     }).catch(function (err) {
       console.log(err.stack)
     })
   })
 
-  app.post('/person/delete', function (req, res) {
-    let query = {_id: new mongodb.ObjectID(req.body.id)}
+  app.delete('/people/:_id', function (req, res) {
+    let query = {_id: new mongodb.ObjectID(req.params._id)}
     db.collection('people').deleteOne(query).then(function (r) {
       assert.equal(1, r.deletedCount)
-      res.redirect('/')
+      res.sendStatus(200)
     }).catch(function (err) {
       console.log(err.stack)
     })

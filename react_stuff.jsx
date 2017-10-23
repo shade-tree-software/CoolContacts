@@ -2,19 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 class NewPerson extends React.Component {
-  constructor(){
+  constructor() {
     super()
-    this.state={name:'',number:''}
+    this.state = {name: '', number: ''}
   }
 
   submitHandler = (e) => {
     e.preventDefault();
     this.props.addNewPerson(this.state.name, this.state.number)
-    this.setState({name:'', number:''})
+    this.setState({name: '', number: ''})
   }
 
   changeHandler = (e) => {
-      this.setState({[e.target.name]: e.target.value})
+    this.setState({[e.target.name]: e.target.value})
   }
 
   render() {
@@ -53,7 +53,7 @@ class NewPerson extends React.Component {
 class Person extends React.Component {
   clickHandler = (e) => {
     e.preventDefault();
-    console.log('delete person');
+    this.props.deletePerson(this.props._id)
   }
 
   render() {
@@ -63,7 +63,7 @@ class Person extends React.Component {
         <td>{this.props.number}</td>
         <td>
           <form action="person/delete" method="post">
-            <input hidden readOnly name="id" value={this.props.id}/>
+            <input hidden readOnly name="_id" value={this.props._id}/>
             <button onClick={this.clickHandler}
                     type="submit"
                     className="btn btn-sm btn-danger">Delete
@@ -79,10 +79,11 @@ class People extends React.Component {
   render() {
     return (
       this.props.people.map((person) =>
-        <Person key={person.id}
-                id={person.id}
+        <Person key={person._id}
+                _id={person._id}
                 name={person.name}
-                number={person.number}/>
+                number={person.number}
+                deletePerson={this.props.deletePerson}/>
       )
     )
   }
@@ -100,7 +101,7 @@ class PeopleTable extends React.Component {
         </tr>
         </thead>
         <tbody>
-        <People people={this.props.people}/>
+        <People people={this.props.people} deletePerson={this.props.deletePerson}/>
         </tbody>
       </table>
     )
@@ -137,17 +138,21 @@ class Clock extends React.Component {
 class App extends React.Component {
   constructor() {
     super()
-    this.state = {people: [
-      {id: 1, name: 'Andrew', number: '703-801-5116'},
-      {id: 2, name: 'Donna', number: '703-927-4117'}
-    ]}
+    this.state = {
+      people: []
+    }
   }
 
   getLatestPeople = () => {
-    //TODO: get latest people from server
+    fetch('/people').then((response) => {
+      return response.json()
+    }).then((data) => {
+      this.setState({people: data})
+    })
   }
 
   componentDidMount() {
+    this.getLatestPeople()
     this.timerId = setInterval(this.getLatestPeople, 10000)
   }
 
@@ -156,11 +161,27 @@ class App extends React.Component {
   }
 
   addNewPerson = (name, number) => {
-    // Add a temporary instance of this person.  This will be wiped when we get the real results from the server
-    this.setState(prevState => ({
-      people: [...prevState.people, {id: Date.now(), name: name, number: number}]
-    }))
-    //TODO: send new person to server
+    fetch('people/new', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'post',
+      body: JSON.stringify({name, number})
+    }).then(() => {
+      // Add a temporary instance of this person.  This will be wiped when we get the real results from the server
+      this.setState(prevState => ({
+        people: [...prevState.people, {_id: Date.now(), name: name, number: number}]
+      }))
+    })
+  }
+
+  deletePerson = (_id) => {
+    fetch('people/' + _id, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'delete'
+    })
   }
 
   render() {
@@ -171,7 +192,7 @@ class App extends React.Component {
         <NewPerson addNewPerson={this.addNewPerson}/>
         <br/>
         <br/>
-        <PeopleTable people={this.state.people}/>
+        <PeopleTable people={this.state.people} deletePerson={this.deletePerson}/>
       </div>
     )
   }
