@@ -5,12 +5,7 @@ const express = require('express')
 const app = express()
 const fs = require('fs');
 const bodyParser = require('body-parser')
-const ejs = require('ejs')
-const co = require('co')
 const assert = require('assert')
-
-//const babel = require("babel-core");
-
 const browserify = require("browserify");
 const babelify = require("babelify");
 
