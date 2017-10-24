@@ -21,7 +21,7 @@ gulp.task('server', function () {
 
 gulp.task('client', function () {
   let bundler = browserify({
-    entries: ['src/client.jsx'],
+    entries: ['src/App.jsx'],
     cache: {},
     packageCache: {}
   });

@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import Clock from './clock.jsx'
-import NewPersonForm from './new-person-form.jsx'
-import PeopleTable from './people-table.jsx'
+import Clock from './Clock.jsx'
+import NewPersonForm from './NewPersonForm.jsx'
+import PeopleTable from './PeopleTable.jsx'
 
 class App extends React.Component {
   constructor() {

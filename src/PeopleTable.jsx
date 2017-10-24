@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PeopleRows from './people-rows.jsx'
+import PeopleRows from './PeopleRows.jsx'
 
 export default class PeopleTable extends React.Component {
   render() {

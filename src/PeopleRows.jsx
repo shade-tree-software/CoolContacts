@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PersonRow from './person-row.jsx'
+import PersonRow from './PersonRow.jsx'
 
 export default class PeopleRows extends React.Component {
   render() {
