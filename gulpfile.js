@@ -5,8 +5,13 @@ const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 const uglify = require('gulp-uglify');
+const fs = require('fs');
 
 gulp.task('default', function () {
+  fs.copyFile('src/index.html', 'dist/index.html', (err) => {
+    if (err) throw err;
+  })
+
   gulp.src('src/server.js')
     .pipe(babel())
     .pipe(gulp.dest('dist'));

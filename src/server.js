@@ -3,14 +3,12 @@
  */
 import express from 'express'
 const app = express()
-const fs = require('fs');
-const bodyParser = require('body-parser')
-const assert = require('assert')
-const browserify = require("browserify");
-const babelify = require("babelify");
+import fs from 'fs';
+import bodyParser from 'body-parser'
+import assert from 'assert'
 
 const mongodbUrl = fs.readFileSync('.mongodb_url', 'utf8')
-const mongodb = require('mongodb');
+import mongodb from 'mongodb'
 const MongoClient = mongodb.MongoClient;
 MongoClient.connect(mongodbUrl).then(function (db) {
   console.log("Database loaded");
@@ -22,12 +20,11 @@ MongoClient.connect(mongodbUrl).then(function (db) {
 let runApp = function (db) {
   app.use(bodyParser.urlencoded({extended: false}))
   app.use(bodyParser.json())
+  app.use(express.static('dist'))
 
   app.get('/', function (req, res) {
-    res.send(fs.readFileSync('index.html', 'utf8'))
+    res.sendFile('index.html', {root: __dirname})
   })
-
-  app.use(express.static('dist'))
 
   app.get('/people', function (req, res) {
     db.collection('people').find().toArray(function (err, result) {
