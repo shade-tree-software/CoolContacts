@@ -1,7 +1,7 @@
 /**
  * Created by ahamilton on 10/19/17.
  */
-const express = require('express')
+import express from 'express'
 const app = express()
 const fs = require('fs');
 const bodyParser = require('body-parser')
@@ -27,9 +27,7 @@ let runApp = function (db) {
     res.send(fs.readFileSync('index.html', 'utf8'))
   })
 
-  app.get('/client.js', function (req, res) {
-    res.send(fs.readFileSync('dist/client.js', 'utf8'))
-  })
+  app.use(express.static('dist'))
 
   app.get('/people', function (req, res) {
     db.collection('people').find().toArray(function (err, result) {

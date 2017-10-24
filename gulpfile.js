@@ -1,17 +1,20 @@
 const gulp = require('gulp');
+const babel = require('gulp-babel');
 const babelify = require('babelify');
 const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 const uglify = require('gulp-uglify');
-const watchify = require('watchify');
 
 gulp.task('default', function () {
+  gulp.src('src/server.js')
+    .pipe(babel())
+    .pipe(gulp.dest('dist'));
+
   let bundler = browserify({
-    entries: ['client.jsx'],
+    entries: ['src/client.jsx'],
     cache: {},
-    packageCache: {},
-    plugin: [watchify]
+    packageCache: {}
   });
 
   bundler.on('update', doBundle);

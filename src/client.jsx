@@ -2,15 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 class NewPerson extends React.Component {
+  static defaultState = {firstName: '', lastName: '', number: ''}
+
   constructor() {
     super()
-    this.state = {firstName: '', lastName: '', number: ''}
+    this.state = NewPerson.defaultState
   }
 
   submitHandler = (e) => {
     e.preventDefault();
     this.props.addNewPerson(this.state)
-    this.setState({firstName: '', lastName: '', number: ''})
+    this.setState(NewPerson.defaultState)
   }
 
   changeHandler = (e) => {
