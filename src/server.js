@@ -11,7 +11,7 @@ const mongodbUrl = fs.readFileSync('.mongodb_url', 'utf8')
 import mongodb from 'mongodb'
 const MongoClient = mongodb.MongoClient;
 MongoClient.connect(mongodbUrl).then(function (db) {
-  console.log("Database loaded");
+  console.log("Connected to database");
   runApp(db)
 }).catch(function (err) {
   console.log(err.stack)

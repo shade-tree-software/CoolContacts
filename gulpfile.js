@@ -7,15 +7,19 @@ const source = require('vinyl-source-stream');
 const uglify = require('gulp-uglify');
 const fs = require('fs');
 
-gulp.task('default', function () {
+gulp.task('index', function () {
   fs.copyFile('src/index.html', 'dist/index.html', (err) => {
     if (err) throw err;
   })
+});
 
+gulp.task('server', function () {
   gulp.src('src/server.js')
     .pipe(babel())
     .pipe(gulp.dest('dist'));
+});
 
+gulp.task('client', function () {
   let bundler = browserify({
     entries: ['src/client.jsx'],
     cache: {},
@@ -37,3 +41,11 @@ gulp.task('default', function () {
       .pipe(gulp.dest('dist'));
   }
 });
+
+gulp.task('watch', function() {
+  gulp.watch('src/index.html', ['index'])
+  gulp.watch('src/*.jsx', ['client'])
+  gulp.watch('src/server.js', ['server'])
+});
+
+gulp.task('default', ['index', 'server', 'client', 'watch']);
