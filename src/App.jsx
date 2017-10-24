@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 
 import Clock from './Clock.jsx'
 import NewPersonForm from './NewPersonForm.jsx'
 import PeopleTable from './PeopleTable.jsx'
 
-class App extends React.Component {
+class MainPage extends React.Component {
   constructor() {
     super()
     this.state = {people: []}
@@ -50,8 +51,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Contacts</h1>
-        <Clock/>
+        <br/>
         <NewPersonForm addNewPerson={this.addNewPerson}/>
         <br/>
         <br/>
@@ -60,6 +60,35 @@ class App extends React.Component {
     )
   }
 }
+
+const About = () => (
+  <div>
+    <h1>About</h1>
+    <p>Contacts v1.0</p>
+  </div>
+)
+
+const NavBar = () => (
+  <nav className="navbar navbar-expand-md bg-light">
+    <a className="navbar-brand" href="#">Contacts</a>
+    <div className="navbar-nav">
+      <Link className="nav-link nav-item" to="/">Home</Link>
+      <Link className="nav-link nav-item" to="/about">About</Link>
+    </div>
+  </nav>
+)
+
+const App = () => (
+  <Router>
+    <div>
+      <NavBar/>
+      <div className="container">
+        <Route exact path="/" component={MainPage}/>
+        <Route path="/about" component={About}/>
+      </div>
+    </div>
+  </Router>
+)
 
 ReactDOM.render(
   <App/>,

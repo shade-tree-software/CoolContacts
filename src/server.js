@@ -22,14 +22,14 @@ let runApp = function (db) {
   app.use(bodyParser.json())
   app.use(express.static('dist'))
 
-  app.get('/', function (req, res) {
-    res.sendFile('index.html', {root: __dirname})
-  })
-
   app.get('/people', function (req, res) {
     db.collection('people').find().toArray(function (err, result) {
       res.send(result)
     })
+  })
+
+  app.get('*', function (req, res) {
+    res.sendFile('index.html', {root: __dirname})
   })
 
   app.post('/people/new', function (req, res) {
