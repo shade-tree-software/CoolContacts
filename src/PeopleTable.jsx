@@ -8,6 +8,7 @@ export default class PeopleTable extends React.Component {
       <table className="table">
         <thead>
         <tr>
+          <th></th>
           <th>First Name</th>
           <th>Last Name</th>
           <th>Phone Number</th>

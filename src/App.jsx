@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
+import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom'
 
-import Clock from './Clock.jsx'
 import NewPersonForm from './NewPersonForm.jsx'
 import PeopleTable from './PeopleTable.jsx'
 
@@ -72,11 +71,21 @@ const NavBar = () => (
   <nav className="navbar navbar-expand-md bg-light">
     <a className="navbar-brand" href="#">Contacts</a>
     <div className="navbar-nav">
-      <Link className="nav-link nav-item" to="/">Home</Link>
-      <Link className="nav-link nav-item" to="/about">About</Link>
+      <NavLink className="nav-link nav-item" exact activeClassName="active" to="/">Home</NavLink>
+      <NavLink className="nav-link nav-item" activeClassName="active" to="/about">About</NavLink>
     </div>
   </nav>
 )
+
+class PersonDetail extends React.Component {
+  render() {
+    return (
+      <div>
+        <p>{JSON.stringify(this.props.match)}</p>
+      </div>
+    )
+  }
+}
 
 const App = () => (
   <Router>
@@ -85,6 +94,7 @@ const App = () => (
       <div className="container">
         <Route exact path="/" component={MainPage}/>
         <Route path="/about" component={About}/>
+        <Route path="/people/:_id" component={PersonDetail}/>
       </div>
     </div>
   </Router>
