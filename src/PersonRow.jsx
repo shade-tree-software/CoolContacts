@@ -14,7 +14,6 @@ export default class PersonRow extends React.Component {
         <td><Link to={link}>?</Link></td>
         <td>{this.props.person.firstName}</td>
         <td>{this.props.person.lastName}</td>
-        <td>{this.props.person.number}</td>
         <td>
           <form action=" person/delete" method=" post">
             <input hidden readOnly name=" _id" value={this.props.person._id}/>

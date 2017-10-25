@@ -11,7 +11,6 @@ export default class PeopleTable extends React.Component {
           <th></th>
           <th>First Name</th>
           <th>Last Name</th>
-          <th>Phone Number</th>
           <th></th>
         </tr>
         </thead>

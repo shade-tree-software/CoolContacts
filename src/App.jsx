@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom'
 
 import NewPersonForm from './NewPersonForm.jsx'
 import PeopleTable from './PeopleTable.jsx'
+import PersonDetail from './PersonDetail.jsx'
 
 class MainPage extends React.Component {
   constructor() {
@@ -12,7 +13,7 @@ class MainPage extends React.Component {
   }
 
   getLatestPeople = () => {
-    fetch('/people').then((response) => {
+    fetch('api/people').then((response) => {
       return response.json()
     }).then((data) => {
       this.setState({people: data})
@@ -29,7 +30,7 @@ class MainPage extends React.Component {
   }
 
   addNewPerson = (person) => {
-    fetch('people/new', {
+    fetch('api/people/new', {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -39,7 +40,7 @@ class MainPage extends React.Component {
   }
 
   deletePerson = (_id) => {
-    fetch('people/' + _id, {
+    fetch('api/people/' + _id, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -76,16 +77,6 @@ const NavBar = () => (
     </div>
   </nav>
 )
-
-class PersonDetail extends React.Component {
-  render() {
-    return (
-      <div>
-        <p>{JSON.stringify(this.props.match)}</p>
-      </div>
-    )
-  }
-}
 
 const App = () => (
   <Router>

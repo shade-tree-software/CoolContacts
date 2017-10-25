@@ -22,8 +22,17 @@ let runApp = function (db) {
   app.use(bodyParser.json())
   app.use(express.static('dist'))
 
-  app.get('/people', function (req, res) {
-    db.collection('people').find().toArray(function (err, result) {
+  app.get('/api/people/:_id', function (req, res) {
+    let query = {_id: new mongodb.ObjectID(req.params._id)}
+    db.collection('people').findOne(query).then(function (data) {
+      res.send(data)
+    }).catch(function (err) {
+      console.log(err.stack)
+    })
+  })
+
+  app.get('/api/people', function (req, res) {
+    db.collection('people').find({}, {firstName: true, lastName: true}).toArray(function (err, result) {
       res.send(result)
     })
   })
@@ -32,7 +41,7 @@ let runApp = function (db) {
     res.sendFile('index.html', {root: __dirname})
   })
 
-  app.post('/people/new', function (req, res) {
+  app.post('/api/people/new', function (req, res) {
     let person = req.body.person
     db.collection('people').insertOne(person).then(function (r) {
       assert.equal(1, r.insertedCount)
@@ -42,7 +51,7 @@ let runApp = function (db) {
     })
   })
 
-  app.delete('/people/:_id', function (req, res) {
+  app.delete('/api/people/:_id', function (req, res) {
     let query = {_id: new mongodb.ObjectID(req.params._id)}
     db.collection('people').deleteOne(query).then(function (r) {
       assert.equal(1, r.deletedCount)
