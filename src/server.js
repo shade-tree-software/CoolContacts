@@ -51,6 +51,17 @@ let runApp = function (db) {
     })
   })
 
+  app.post('/api/people/:_id', function (req, res) {
+    let query = {_id: new mongodb.ObjectID(req.params._id)}
+    let update = {$set: {[req.params.name]: req.params.value}}
+    db.collection('people').updateOne(query, update).then(function (r) {
+      console.log(JSON.stringify(r))
+      res.sendStatus(200)
+    }).catch(function (err) {
+      console.log(err.stack)
+    })
+  })
+
   app.delete('/api/people/:_id', function (req, res) {
     let query = {_id: new mongodb.ObjectID(req.params._id)}
     db.collection('people').deleteOne(query).then(function (r) {
