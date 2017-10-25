@@ -8,6 +8,7 @@ const uglify = require('gulp-uglify');
 const fs = require('fs');
 
 gulp.task('index', function () {
+  fs.existsSync("dist") || fs.mkdirSync("dist");
   fs.copyFile('src/index.html', 'dist/index.html', (err) => {
     if (err) throw err;
   })
@@ -37,7 +38,7 @@ gulp.task('client', function () {
       })
       .pipe(source('client.js'))
       .pipe(buffer())
-      .pipe(uglify()) // Use any gulp plugins you want now
+      //.pipe(uglify()) // Use any gulp plugins you want now
       .pipe(gulp.dest('dist'));
   }
 });
@@ -48,4 +49,4 @@ gulp.task('watch', function() {
   gulp.watch('src/server.js', ['server'])
 });
 
-gulp.task('default', ['index', 'server', 'client', 'watch']);
+gulp.task('default', ['server', 'client', 'index', 'watch']);

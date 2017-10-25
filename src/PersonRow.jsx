@@ -1,29 +1,24 @@
 import React from 'react'
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 
 export default class PersonRow extends React.Component {
-  clickHandler = (e) => {
+  onClickDelete = (e) => {
     e.preventDefault();
     this.props.deletePerson(this.props.person._id)
   }
 
+  onClickRow = () => {
+    this.props.history.push('/people/' + this.props.person._id)
+  }
+
   render() {
-    let link = "/people/" + this.props.person._id
     return (
-      <tr>
-        <td><Link to={link}>?</Link></td>
-        <td>{this.props.person.firstName}</td>
-        <td>{this.props.person.lastName}</td>
-        <td>
-          <form action=" person/delete" method=" post">
-            <input hidden readOnly name=" _id" value={this.props.person._id}/>
-            <button onClick={this.clickHandler}
-                    type=" submit"
-                    className=" btn btn-sm btn-danger">Delete
-            </button>
-          </form>
-        </td>
-      </tr>
+        <tr onClick={this.onClickRow}>
+          <td>{this.props.person.firstName}</td>
+          <td>{this.props.person.lastName}</td>
+          <td>
+            <button onClick={this.onClickDelete} className="btn btn-sm btn-danger">Delete</button>
+          </td>
+        </tr>
     )
   }
 }

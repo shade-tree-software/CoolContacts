@@ -55,7 +55,7 @@ class MainPage extends React.Component {
         <NewPersonForm addNewPerson={this.addNewPerson}/>
         <br/>
         <br/>
-        <PeopleTable people={this.state.people} deletePerson={this.deletePerson}/>
+        <PeopleTable history={this.props.history} people={this.state.people} deletePerson={this.deletePerson}/>
       </div>
     )
   }
