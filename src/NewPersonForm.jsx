@@ -3,8 +3,8 @@ import React from 'react'
 export default class NewPersonForm extends React.Component {
   static defaultState = {firstName: '', lastName: '', number: '', address: ''}
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = NewPersonForm.defaultState
   }
 

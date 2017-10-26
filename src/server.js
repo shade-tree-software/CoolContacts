@@ -51,7 +51,7 @@ let runApp = function (db) {
     })
   })
 
-  app.post('/api/people/:_id', function (req, res) {
+  app.put('/api/people/:_id', function (req, res) {
     let query = {_id: new mongodb.ObjectID(req.params._id)}
     let update = {$set: {[req.params.name]: req.params.value}}
     db.collection('people').updateOne(query, update).then(function (r) {

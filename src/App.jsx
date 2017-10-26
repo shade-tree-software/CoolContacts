@@ -7,8 +7,8 @@ import PeopleTable from './PeopleTable.jsx'
 import PersonDetail from './PersonDetail.jsx'
 
 class MainPage extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {people: []}
   }
 
