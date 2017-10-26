@@ -16,7 +16,7 @@ class PersonFieldForm extends React.Component {
         'Content-Type': 'application/json'
       },
       method: 'put',
-      body: JSON.stringify({name:this.props.name, value:this.state.value, _id:this.props._id})
+      body: JSON.stringify({name:this.props.name, value:this.state.value})
     }).then(() => {
       this.props.onDone(this.state.value)
     })
