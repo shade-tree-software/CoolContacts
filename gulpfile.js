@@ -38,7 +38,7 @@ gulp.task('client', function () {
       })
       .pipe(source('client.js'))
       .pipe(buffer())
-      //.pipe(uglify()) // Use any gulp plugins you want now
+      .pipe(uglify()) // Use any gulp plugins you want now
       .pipe(gulp.dest('dist'));
   }
 });
