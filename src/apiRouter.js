@@ -21,7 +21,7 @@ export default function(db){
       console.log(err.stack)
     })
   })
-  apiRouter.post('/people/new', function (req, res) {
+  apiRouter.post('/people', function (req, res) {
     let person = req.body.person
     db.collection('people').insertOne(person).then(function (r) {
       assert.equal(1, r.insertedCount)

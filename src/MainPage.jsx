@@ -27,7 +27,7 @@ export default class MainPage extends React.Component {
   }
 
   addNewPerson = (person) => {
-    fetch('api/people/new', {
+    fetch('api/people', {
       headers: {
         'Content-Type': 'application/json'
       },
