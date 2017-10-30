@@ -1,6 +1,9 @@
 import express from 'express'
 import mongodb from 'mongodb'
 import assert from 'assert'
+import jwt from 'jsonwebtoken'
+import pwHash from 'password-hash'
+
 import RouterLogger from './RouterLogger'
 
 export default function (db) {
@@ -52,6 +55,24 @@ export default function (db) {
         console.log(err.stack)
       })
     })
+
+  apiRouter.post('/authenticate', function (req, res) {
+    let query = {name: req.body.name}
+    db.collection('users').findOne(query).then(function (data) {
+      if (data && pwHash.verify(req.body.password, data.password)) {
+        let token = jwt.sign(query, process.env.SECRET)
+        res.json({
+          success: true,
+          message: 'access granted',
+          token: token
+        })
+      } else(
+        res.sendStatus(404)
+      )
+    }).catch(function (err) {
+      console.log(err.stack)
+    })
+  });
 
   return apiRouter
 }
