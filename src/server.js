@@ -25,4 +25,4 @@ let runApp = function (db) {
   })
 }
 
-initDb(runApp)
+initDb().then(runApp)
