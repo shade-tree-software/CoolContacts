@@ -15,7 +15,7 @@ gulp.task('index', function () {
 });
 
 gulp.task('server', function () {
-  gulp.src('src/server.js')
+  gulp.src('src/*.js')
     .pipe(babel())
     .pipe(gulp.dest('dist'));
 });
@@ -46,7 +46,7 @@ gulp.task('client', function () {
 gulp.task('watch', function() {
   gulp.watch('src/index.html', ['index'])
   gulp.watch('src/*.jsx', ['client'])
-  gulp.watch('src/server.js', ['server'])
+  gulp.watch('src/*.js', ['server'])
 });
 
 gulp.task('default', ['server', 'client', 'index', 'watch']);
