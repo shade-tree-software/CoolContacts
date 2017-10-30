@@ -20,9 +20,42 @@ MongoClient.connect(mongodbUrl).then(function (db) {
 let runApp = function (db) {
   app.use(bodyParser.urlencoded({extended: false}))
   app.use(bodyParser.json())
-  app.use(express.static('dist'))
 
-  app.get('/api/people/:_id', function (req, res) {
+  let basicRouter = express.Router()
+
+  basicRouter.get('/client.js', function(req, res){
+    console.log('BASIC GET: /client.js')
+    res.sendFile('client.js', {root: __dirname})
+  })
+
+  basicRouter.get('/', function(req, res){
+    console.log('BASIC GET: /')
+    res.sendFile('index.html', {root: __dirname})
+  })
+
+  basicRouter.get('/about', function(req, res){
+    console.log('BASIC GET: /about')
+    res.sendFile('index.html', {root: __dirname})
+  })
+
+  basicRouter.get('/people/*', function(req, res){
+    console.log('BASIC GET: /people/:_id')
+    res.sendFile('index.html', {root: __dirname})
+  })
+
+  app.use('/', basicRouter)
+
+  let apiRouter = express.Router()
+
+  apiRouter.get('/people', function (req, res) {
+    console.log('API GET: /people')
+    db.collection('people').find({}, {firstName: true, lastName: true}).toArray(function (err, result) {
+      res.send(result)
+    })
+  })
+
+  apiRouter.get('/people/:_id', function(req, res){
+    console.log('API GET: /people/:_id')
     let query = {_id: new mongodb.ObjectID(req.params._id)}
     db.collection('people').findOne(query).then(function (data) {
       res.send(data)
@@ -31,17 +64,8 @@ let runApp = function (db) {
     })
   })
 
-  app.get('/api/people', function (req, res) {
-    db.collection('people').find({}, {firstName: true, lastName: true}).toArray(function (err, result) {
-      res.send(result)
-    })
-  })
-
-  app.get('*', function (req, res) {
-    res.sendFile('index.html', {root: __dirname})
-  })
-
-  app.post('/api/people/new', function (req, res) {
+  apiRouter.post('/people/new', function (req, res) {
+    console.log('API POST: /people/new')
     let person = req.body.person
     db.collection('people').insertOne(person).then(function (r) {
       assert.equal(1, r.insertedCount)
@@ -51,7 +75,8 @@ let runApp = function (db) {
     })
   })
 
-  app.put('/api/people/:_id', function (req, res) {
+  apiRouter.put('/people/:_id', function (req, res) {
+    console.log('API PUT: /people/:_id')
     let query = {_id: new mongodb.ObjectID(req.params._id)}
     let update = {$set: {[req.body.name]: req.body.value}}
     db.collection('people').updateOne(query, update).then(function (r) {
@@ -61,7 +86,8 @@ let runApp = function (db) {
     })
   })
 
-  app.delete('/api/people/:_id', function (req, res) {
+  apiRouter.delete('/people/:_id', function (req, res) {
+    console.log('API DELETE: /people/:_id')
     let query = {_id: new mongodb.ObjectID(req.params._id)}
     db.collection('people').deleteOne(query).then(function (r) {
       assert.equal(1, r.deletedCount)
@@ -70,6 +96,8 @@ let runApp = function (db) {
       console.log(err.stack)
     })
   })
+
+  app.use('/api', apiRouter);
 
   let port = process.env.PORT || 4000
   app.listen(port, function () {
