@@ -2,7 +2,7 @@ import React from 'react'
 
 export default class PersonRow extends React.Component {
   onClickDelete = (e) => {
-    e.preventDefault();
+    e.stopPropagation();
     this.props.deletePerson(this.props.person._id)
   }
 
