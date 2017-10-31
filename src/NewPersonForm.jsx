@@ -20,7 +20,7 @@ export default class NewPersonForm extends React.Component {
 
   render() {
     return (
-        <form onSubmit={this.submitHandler} action="person/new" method="post">
+        <form onSubmit={this.submitHandler}>
           <div className="row">
             <div className="col-lg-3 col-md-4 col-sm-5">
               <input name="firstName"

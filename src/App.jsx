@@ -6,6 +6,7 @@ import NavBar from './NavBar.jsx'
 import MainPage from './MainPage.jsx'
 import About from './About.jsx'
 import PersonDetail from './PersonDetail.jsx'
+import LoginForm from './LoginForm.jsx'
 
 class App extends React.Component {
   render() {
@@ -14,7 +15,8 @@ class App extends React.Component {
         <div>
           <NavBar/>
           <div className="container">
-            <Route exact path="/" component={MainPage}/>
+            <Route exact path="/" component={LoginForm}/>
+            <Route path="/main" component={MainPage}/>
             <Route path="/about" component={About}/>
             <Route path="/people/:_id" component={PersonDetail}/>
           </div>
