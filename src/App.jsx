@@ -9,16 +9,25 @@ import PersonDetail from './PersonDetail.jsx'
 import LoginForm from './LoginForm.jsx'
 
 class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {authToken: null}
+  }
+
+  saveAuthToken = (authToken) => {
+    this.setState({authToken})
+  }
+
   render() {
     return (
       <Router>
         <div>
           <NavBar/>
           <div className="container">
-            <Route exact path="/" component={LoginForm}/>
-            <Route path="/main" component={MainPage}/>
+            <Route exact path="/" component={props => <LoginForm {...props} saveAuthToken={this.saveAuthToken}/>}/>
+            <Route path="/main" component={props => <MainPage {...props} authToken={this.state.authToken}/>}/>
             <Route path="/about" component={About}/>
-            <Route path="/people/:_id" component={PersonDetail}/>
+            <Route path="/people/:_id" component={props => <PersonDetail {...props} authToken={this.state.authToken}/>}/>
           </div>
         </div>
       </Router>

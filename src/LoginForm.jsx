@@ -11,7 +11,18 @@ export default class LoginForm extends React.Component {
   submitHandler = (e) => {
     e.preventDefault();
     this.setState(LoginForm.defaultState)
-    this.props.history.push('/main')
+    fetch('api/authenticate', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'post',
+      body: JSON.stringify(this.state)
+    }).then((response) => {
+      return response.json()
+    }).then((data) => {
+      this.props.saveAuthToken(data.token)
+      this.props.history.push('/main')
+    })
   }
 
   changeHandler = (e) => {

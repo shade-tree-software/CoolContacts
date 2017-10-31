@@ -11,12 +11,12 @@ class PersonFieldForm extends React.Component {
   }
 
   onOKClick = () => {
-    fetch('/api/people/' + this.props._id, {
+    fetch('/api/people/' + this.props._id + '?token=' + this.props.authToken, {
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'put',
-      body: JSON.stringify({name:this.props.name, value:this.state.value})
+      body: JSON.stringify({name: this.props.name, value: this.state.value})
     }).then(() => {
       this.props.onDone(this.state.value)
     })
@@ -26,8 +26,8 @@ class PersonFieldForm extends React.Component {
     this.props.onDone(null)
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <span><input onChange={this.changeHandler} defaultValue={this.state.value}/><span> </span>
         <button type="button" className="btn btn-primary btn-sm" onClick={this.onOKClick}>OK</button>
         <span> </span>
@@ -51,7 +51,7 @@ class PersonField extends React.Component {
   }
 
   onDone = (newValue) => {
-    if (newValue){
+    if (newValue) {
       this.setState({value: newValue})
     }
     this.setState({editing: false});
@@ -60,7 +60,11 @@ class PersonField extends React.Component {
   render() {
     let val = null
     if (this.state.editing) {
-      val = <PersonFieldForm onDone={this.onDone} name={this.props.name} value={this.state.value} _id={this.props._id}/>
+      val = <PersonFieldForm onDone={this.onDone}
+                             name={this.props.name}
+                             value={this.state.value}
+                             _id={this.props._id}
+                             authToken={this.props.authToken}/>
     } else {
       val = <span>{this.state.value}<span> </span>
         <button type="button" className="btn btn-primary btn-sm" onClick={this.onEditClick}>Edit</button>
@@ -77,7 +81,7 @@ export default class PersonDetail extends React.Component {
   }
 
   getPersonDetails = () => {
-    fetch('/api/people/' + this.props.match.params._id).then((response) => {
+    fetch('/api/people/' + this.props.match.params._id + '?token=' + this.props.authToken).then((response) => {
       return response.json()
     }).then((data) => {
       this.setState({person: data})
@@ -97,11 +101,17 @@ export default class PersonDetail extends React.Component {
           <tbody>
           <tr>
             <th scope="row">Address:</th>
-            <td><PersonField name="address" value={this.state.person.address} _id={this.state.person._id}/></td>
+            <td><PersonField name="address"
+                             value={this.state.person.address}
+                             _id={this.state.person._id}
+                             authToken={this.props.authToken}/></td>
           </tr>
           <tr>
             <th scope="row">Phone:</th>
-            <td><PersonField name="number" value={this.state.person.number} _id={this.state.person._id}/></td>
+            <td><PersonField name="number"
+                             value={this.state.person.number}
+                             _id={this.state.person._id}
+                             authToken={this.props.authToken}/></td>
           </tr>
           </tbody>
         </table>

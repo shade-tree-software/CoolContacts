@@ -12,15 +12,6 @@ export default function(db){
   basicRouter.get('/', function(req, res){
     res.sendFile('index.html', {root: __dirname})
   })
-  basicRouter.get('/about', function(req, res){
-    res.sendFile('index.html', {root: __dirname})
-  })
-  basicRouter.get('/main', function(req, res){
-    res.sendFile('index.html', {root: __dirname})
-  })
-  basicRouter.get('/people/*', function(req, res){
-    res.sendFile('index.html', {root: __dirname})
-  })
 
   return basicRouter
 }
