@@ -18,16 +18,21 @@ class App extends React.Component {
     this.setState({authToken})
   }
 
+  clearAuthToken = () => {
+    this.saveAuthToken(null)
+  }
+
   render() {
     return (
       <Router>
         <div>
-          <NavBar/>
+          <Route path="/" component={props => <NavBar {...props} clearAuthToken={this.clearAuthToken}/>}/>
           <div className="container">
             <Route exact path="/" component={props => <LoginForm {...props} saveAuthToken={this.saveAuthToken}/>}/>
             <Route path="/main" component={props => <MainPage {...props} authToken={this.state.authToken}/>}/>
             <Route path="/about" component={About}/>
-            <Route path="/people/:_id" component={props => <PersonDetail {...props} authToken={this.state.authToken}/>}/>
+            <Route path="/people/:_id"
+                   component={props => <PersonDetail {...props} authToken={this.state.authToken}/>}/>
           </div>
         </div>
       </Router>
