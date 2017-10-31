@@ -7,6 +7,7 @@ import MainPage from './MainPage.jsx'
 import About from './About.jsx'
 import PersonDetail from './PersonDetail.jsx'
 import LoginForm from './LoginForm.jsx'
+import addPropsToRoute from './addPropsToRoute.jsx'
 
 class App extends React.Component {
   constructor() {
@@ -26,13 +27,12 @@ class App extends React.Component {
     return (
       <Router>
         <div>
-          <Route path="/" component={props => <NavBar {...props} clearAuthToken={this.clearAuthToken}/>}/>
+          <Route path="/" component={addPropsToRoute(NavBar, {clearAuthToken: this.clearAuthToken})}/>
           <div className="container">
-            <Route exact path="/" component={props => <LoginForm {...props} saveAuthToken={this.saveAuthToken}/>}/>
-            <Route path="/main" component={props => <MainPage {...props} authToken={this.state.authToken}/>}/>
+            <Route exact path="/" component={addPropsToRoute(LoginForm, {saveAuthToken: this.saveAuthToken})}/>
+            <Route path="/main" component={addPropsToRoute(MainPage, {authToken: this.state.authToken})}/>
             <Route path="/about" component={About}/>
-            <Route path="/people/:_id"
-                   component={props => <PersonDetail {...props} authToken={this.state.authToken}/>}/>
+            <Route path="/people/:_id" component={addPropsToRoute(PersonDetail, {authToken: this.state.authToken})}/>
           </div>
         </div>
       </Router>
