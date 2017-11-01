@@ -2,7 +2,7 @@
   "name": "CoolContacts",
   "repository": "https://github.com/shade-tree-software/CoolContacts.git",
   "engines": {
-    "node": ">=8.0"
+    "node": ">=8, <9"
   },
   "version": "1.0.0",
   "description": "",
