@@ -2,9 +2,10 @@ import React from 'react'
 import {NavLink} from 'react-router-dom'
 
 export default class NavBar extends React.Component {
-  logout = () => {
+  logout = (e) => {
+    e.preventDefault()
     this.props.clearAuthToken()
-    this.props.history.push('/')
+    this.props.history.push('/login')
   }
 
   render() {
@@ -22,7 +23,7 @@ export default class NavBar extends React.Component {
           <div className="navbar-nav">
             <NavLink className="nav-link nav-item" activeClassName="active" to="/main">Home</NavLink>
             <NavLink className="nav-link nav-item" activeClassName="active" to="/about">About</NavLink>
-            <a onClick={this.logout} className="nav-link nav-item" href="#">Logout</a>
+            <a onClick={this.logout} className="nav-link nav-item" href="/">Logout</a>
           </div>
         </nav>
       )
