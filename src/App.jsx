@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom'
 
 import NavBar from './NavBar.jsx'
 import MainPage from './MainPage.jsx'
@@ -29,10 +29,17 @@ class App extends React.Component {
         <div>
           <Route path="/" component={addPropsToRoute(NavBar, {clearAuthToken: this.clearAuthToken})}/>
           <div className="container">
-            <Route exact path="/" component={addPropsToRoute(LoginForm, {saveAuthToken: this.saveAuthToken})}/>
-            <Route path="/main" component={addPropsToRoute(MainPage, {authToken: this.state.authToken})}/>
-            <Route path="/about" component={About}/>
-            <Route path="/people/:_id" component={addPropsToRoute(PersonDetail, {authToken: this.state.authToken})}/>
+            <Route exact path="/" render={(props) => (this.state.authToken ?
+              <MainPage {...props} authToken={this.state.authToken}/> :
+              <Redirect to="/login"/>)}/>
+            <Route path="/login" component={addPropsToRoute(LoginForm, {saveAuthToken: this.saveAuthToken})}/>
+            <Route path="/main" render={(props) => (this.state.authToken ?
+              <MainPage {...props} authToken={this.state.authToken}/> :
+              <Redirect to="/login"/>)}/>
+            <Route path="/about" render={() => (this.state.authToken ? <About/> : <Redirect to="/login"/>)}/>
+            <Route path="/people/:_id" render={(props) => (this.state.authToken ?
+              <PersonDetail {...props} authToken={this.state.authToken}/> :
+              <Redirect to="/login"/>)}/>
           </div>
         </div>
       </Router>
@@ -41,6 +48,7 @@ class App extends React.Component {
 }
 
 ReactDOM.render(
-  <App/>,
+  <App/>
+  ,
   document.getElementById('root')
 );

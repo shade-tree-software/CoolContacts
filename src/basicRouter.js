@@ -9,7 +9,7 @@ export default function(db){
   basicRouter.get('/client.js', function(req, res){
     res.sendFile('client.js', {root: __dirname})
   })
-  basicRouter.get('/', function(req, res){
+  basicRouter.get(['/', '/login', '/about', '/main', '/people/:_id'], function(req, res){
     res.sendFile('index.html', {root: __dirname})
   })
 
