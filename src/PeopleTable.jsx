@@ -5,8 +5,8 @@ import PeopleRows from './PeopleRows.jsx'
 export default class PeopleTable extends React.Component {
   render() {
     return (
-      <table className="table table-hover">
-        <thead>
+      <table className="table table-hover table-striped">
+        <thead className="large-only">
         <tr>
           <th>First Name</th>
           <th>Last Name</th>

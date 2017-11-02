@@ -6,12 +6,25 @@ const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 const uglify = require('gulp-uglify');
 const fs = require('fs');
+const sass = require('node-sass');
 
 gulp.task('index', function () {
   fs.existsSync("dist") || fs.mkdirSync("dist");
   fs.copyFile('src/index.html', 'dist/index.html', (err) => {
     if (err) throw err;
   })
+  sass.render({
+    file: 'src/app.scss',
+      outFile: 'dist/app.css',
+}, function(error, result) {
+    if(!error){
+      fs.writeFile('dist/app.css', result.css, function(err){
+        if (err) throw err;
+      });
+    }else{
+      throw error;
+    }
+  });
 });
 
 gulp.task('server', function () {
@@ -44,7 +57,7 @@ gulp.task('client', function () {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('src/index.html', ['index'])
+  gulp.watch(['src/*.html', 'src/*.css', 'src/*.scss'], ['index'])
   gulp.watch('src/*.jsx', ['client'])
   gulp.watch('src/*.js', ['server'])
 });
