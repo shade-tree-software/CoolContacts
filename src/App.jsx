@@ -7,39 +7,23 @@ import MainPage from './MainPage.jsx'
 import About from './About.jsx'
 import PersonDetail from './PersonDetail.jsx'
 import LoginForm from './LoginForm.jsx'
-import addPropsToRoute from './addPropsToRoute.jsx'
 
 class App extends React.Component {
-  constructor() {
-    super()
-    this.state = {authToken: null}
-  }
-
-  saveAuthToken = (authToken) => {
-    this.setState({authToken})
-  }
-
-  clearAuthToken = () => {
-    this.saveAuthToken(null)
-  }
-
   render() {
     return (
       <Router>
         <div>
-          <Route path="/" component={addPropsToRoute(NavBar, {clearAuthToken: this.clearAuthToken})}/>
+          <Route path="/" component={NavBar}/>
           <div className="container">
-            <Route exact path="/" render={(props) => (this.state.authToken ?
-              <MainPage {...props} authToken={this.state.authToken}/> :
-              <Redirect to="/login"/>)}/>
-            <Route path="/login" component={addPropsToRoute(LoginForm, {saveAuthToken: this.saveAuthToken})}/>
-            <Route path="/main" render={(props) => (this.state.authToken ?
-              <MainPage {...props} authToken={this.state.authToken}/> :
-              <Redirect to="/login"/>)}/>
-            <Route path="/about" render={() => (this.state.authToken ? <About/> : <Redirect to="/login"/>)}/>
-            <Route path="/people/:_id" render={(props) => (this.state.authToken ?
-              <PersonDetail {...props} authToken={this.state.authToken}/> :
-              <Redirect to="/login"/>)}/>
+            <Route exact path="/" render={(props) => (
+              sessionStorage.authToken ? <MainPage {...props}/> : <Redirect to="/login"/> )}/>
+            <Route path="/login" component={LoginForm}/>
+            <Route path="/main" render={(props) => (
+              sessionStorage.authToken ? <MainPage {...props}/> : <Redirect to="/login"/> )}/>
+            <Route path="/about" render={() => (
+              sessionStorage.authToken ? <About/> : <Redirect to="/login"/> )}/>
+            <Route path="/people/:_id" render={(props) => (
+              sessionStorage.authToken ? <PersonDetail {...props}/> : <Redirect to="/login"/>)}/>
           </div>
         </div>
       </Router>

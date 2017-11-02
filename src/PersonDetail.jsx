@@ -11,7 +11,7 @@ class PersonFieldForm extends React.Component {
   }
 
   onOKClick = () => {
-    fetch('/api/people/' + this.props._id + '?token=' + this.props.authToken, {
+    fetch('/api/people/' + this.props._id + '?token=' + sessionStorage.authToken, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -63,8 +63,7 @@ class PersonField extends React.Component {
       val = <PersonFieldForm onDone={this.onDone}
                              name={this.props.name}
                              value={this.state.value}
-                             _id={this.props._id}
-                             authToken={this.props.authToken}/>
+                             _id={this.props._id}/>
     } else {
       val = <span>{this.state.value}<span> </span>
         <button type="button" className="btn btn-primary btn-sm" onClick={this.onEditClick}>Edit</button>
@@ -81,7 +80,7 @@ export default class PersonDetail extends React.Component {
   }
 
   getPersonDetails = () => {
-    fetch('/api/people/' + this.props.match.params._id + '?token=' + this.props.authToken).then((response) => {
+    fetch('/api/people/' + this.props.match.params._id + '?token=' + sessionStorage.authToken).then((response) => {
       return response.json()
     }).then((data) => {
       this.setState({person: data})
@@ -103,15 +102,13 @@ export default class PersonDetail extends React.Component {
             <th scope="row">Address:</th>
             <td><PersonField name="address"
                              value={this.state.person.address}
-                             _id={this.state.person._id}
-                             authToken={this.props.authToken}/></td>
+                             _id={this.state.person._id}/></td>
           </tr>
           <tr>
             <th scope="row">Phone:</th>
             <td><PersonField name="number"
                              value={this.state.person.number}
-                             _id={this.state.person._id}
-                             authToken={this.props.authToken}/></td>
+                             _id={this.state.person._id}/></td>
           </tr>
           </tbody>
         </table>

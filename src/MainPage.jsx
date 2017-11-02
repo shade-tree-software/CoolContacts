@@ -20,7 +20,7 @@ export default class MainPage extends React.Component {
   }
 
   getLatestPeople = () => {
-    fetch('api/people?token=' + this.props.authToken).then((response) => {
+    fetch('api/people?token=' + sessionStorage.authToken).then((response) => {
       return response.json()
     }).then((data) => {
       this.setState({people: data})
@@ -28,7 +28,7 @@ export default class MainPage extends React.Component {
   }
 
   addNewPerson = (person) => {
-    fetch('api/people?token=' + this.props.authToken, {
+    fetch('api/people?token=' + sessionStorage.authToken, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -38,7 +38,7 @@ export default class MainPage extends React.Component {
   }
 
   deletePerson = (_id) => {
-    fetch('api/people/' + _id + '?token=' + this.props.authToken, {
+    fetch('api/people/' + _id + '?token=' + sessionStorage.authToken, {
       headers: {
         'Content-Type': 'application/json'
       },
