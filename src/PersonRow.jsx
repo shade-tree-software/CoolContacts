@@ -34,6 +34,8 @@ export default class PersonRow extends React.Component {
         <td className={hideOnSmCollapsed}><span className="small-only bold-text">First Name: </span>{this.props.person.firstName}</td>
         <td className={hideOnSmCollapsed}><span className="small-only bold-text">Last Name: </span>{this.props.person.lastName}</td>
         <td className={hideOnSmCollapsed}>
+          <button onClick={this.onClickEdit} className="btn btn-sm btn-primary large-only">Edit</button>
+          <span> </span>
           <button onClick={this.onClickDelete} className="btn btn-sm btn-danger">Delete</button>
           <button onClick={this.onClickEdit} className="btn btn-sm btn-primary float-right small-only">Edit</button>
         </td>
