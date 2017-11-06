@@ -3,8 +3,8 @@
  */
 import express from 'express'
 import bodyParser from 'body-parser'
+import mongodb from 'mongodb'
 
-import initDb from './initDb'
 import initBasicRouter from './basicRouter'
 import initApiRouter from './apiRouter'
 
@@ -25,4 +25,4 @@ let runApp = function (db) {
   })
 }
 
-initDb().then(runApp)
+mongodb.MongoClient.connect(process.env.MONGODB_URL).then(runApp)
